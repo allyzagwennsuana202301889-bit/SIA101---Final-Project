@@ -1,12 +1,14 @@
 {
-  "name": "sia101-final-project",
+  "name": "progression-service",
   "version": "1.0.0",
+  "description": "SIA Final Project - Progression Service",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^4.22.1"
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
   }
 }
