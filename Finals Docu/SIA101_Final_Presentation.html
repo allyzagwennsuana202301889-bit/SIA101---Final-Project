@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIA 101 - Final Project Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            padding: 50px 70px;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #f8fafc;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #94a3b8;
+        }
+
+        p, li {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li::before {
+            content: "▸";
+            color: #60a5fa;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-top: -8px;
+            margin-bottom: 35px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 14px;
+            padding: 25px;
+            border: 1px solid #334155;
+            overflow-y: auto;
+        }
+
+        .card h3 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .code-block .key { color: #f472b6; }
+        .code-block .string { color: #a3e635; }
+        .code-block .number { color: #fbbf24; }
+        .code-block .comment { color: #64748b; }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .badge-blue { background: #1e3a5f; color: #60a5fa; }
+        .badge-green { background: #1e3a2f; color: #4ade80; }
+        .badge-purple { background: #3b1e4f; color: #c084fc; }
+        .badge-orange { background: #4a2c0f; color: #fb923c; }
+        .badge-red { background: #4a1c1c; color: #f87171; }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #1e293b;
+            color: #60a5fa;
+            padding: 10px 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #334155;
+        }
+
+        td {
+            padding: 9px 15px;
+            border-bottom: 1px solid #1e293b;
+            color: #cbd5e1;
+        }
+
+        tr:hover td {
+            background: #1e293b;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #1e3a5f, #3b1e4f);
+            border-radius: 14px;
+            padding: 20px 25px;
+            margin: 15px 0;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .highlight-box h4 {
+            color: #f8fafc;
+            margin-bottom: 8px;
+        }
+
+        .nav-hint {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            color: #64748b;
+            border: 1px solid #334155;
+            z-index: 100;
+        }
+
+        .endpoint-card {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 12px 0;
+            border-left: 4px solid #4ade80;
+        }
+
+        .endpoint-card .method {
+            color: #4ade80;
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 1rem;
+        }
+
+        .endpoint-card .path {
+            color: #f8fafc;
+            font-family: monospace;
+            font-size: 1rem;
+            margin-left: 8px;
+        }
+
+        .endpoint-card p {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+        }
+
+        .title-slide .date {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .title-slide .badges {
+            margin-top: 30px;
+        }
+
+        .diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .diagram-box {
+            background: #1e293b;
+            border: 2px solid #60a5fa;
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .diagram-box h4 {
+            color: #60a5fa;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .diagram-box p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .diagram-arrow {
+            font-size: 1.5rem;
+            color: #64748b;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+
+        .check-pass {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active title-slide">
+        <h1>Progression Service</h1>
+        <p class="subtitle">Gamification Microservice with XP & Leaderboard System</p>
+        <p class="date">SIA 101 — Final Project</p>
+        <p class="date">May 2026</p>
+        <div class="badges">
+            <span class="badge badge-blue">Node.js</span>
+            <span class="badge badge-green">Express</span>
+            <span class="badge badge-purple">JWT</span>
+            <span class="badge badge-orange">REST API</span>
+        </div>
+        <p class="team-name">Allyza Gwenn Suana · Mica-Ella Bacalso · Rixianne Jade Generalao</p>
+    </div>
+
+    <!-- SLIDE 2: Agenda -->
+    <div class="slide">
+        <h2>Presentation Agenda</h2>
+        <div class="two-column">
+            <div>
+                <ul>
+                    <li>Overview of the Original System</li>
+                    <li>Integration Objectives</li>
+                    <li>Architecture Walkthrough</li>
+                    <li>API Endpoints & Authentication</li>
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    <li>Integration Process</li>
+                    <li>Challenges & Solutions</li>
+                    <li>Testing & Validation</li>
+                    <li>Live Postman Demonstrations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: Original System -->
+    <div class="slide">
+        <h2>Overview of the Original System</h2>
+        <div class="two-column">
+            <div>
+                <h3>What It Was</h3>
+                <ul>
+                    <li>Academic learning management system</li>
+                    <li>User registration and login</li>
+                    <li>Lesson content viewing</li>
+                    <li>Quiz taking with score display</li>
+                    <li>Basic user profile management</li>
+                </ul>
+                <h3 style="margin-top: 20px;">Tech Stack</h3>
+                <p><span class="badge badge-blue">React</span> Frontend</p>
+                <p><span class="badge badge-green">Node.js</span> Main Backend</p>
+                <p><span class="badge badge-purple">MySQL</span> Primary Database</p>
+            </div>
+            <div class="card">
+                <h3>Existing Limitations</h3>
+                <table>
+                    <tr>
+                        <th>Limitation</th>
+                        <th>Impact</th>
+                    </tr>
+                    <tr>
+                        <td>No gamification</td>
+                        <td>Low engagement</td>
+                    </tr>
+                    <tr>
+                        <td>No XP/leveling</td>
+                        <td>No skill growth tracking</td>
+                    </tr>
+                    <tr>
+                        <td>No leaderboard</td>
+                        <td>No competition</td>
+                    </tr>
+                    <tr>
+                        <td>No progress visualization</td>
+                        <td>Can't see next level</td>
+                    </tr>
+                    <tr>
+                        <td>Monolithic structure</td>
+                        <td>Hard to scale</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Integration Objectives -->
+    <div class="slide">
+        <h2>Integration Objectives</h2>
+        <div class="two-column">
+            <div>
+                <h3>What We Added</h3>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h3>🎮 Gamification Layer</h3>
+                    <ul>
+                        <li>XP accumulation system</li>
+                        <li>Level progression (exponential curve)</li>
+                        <li>Lesson & quiz rewards</li>
+                        <li>Score-based bonus XP</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🏆 Social Features</h3>
+                    <ul>
+                        <li>Global leaderboard</li>
+                        <li>Ranked by level, then XP</li>
+                        <li>Quiz average scores</li>
+                        <li>Public API — no auth needed</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h3>Why We Integrated</h3>
+                <div class="highlight-box">
+                    <h4>Separation of Concerns</h4>
+                    <p>Progression logic should not be mixed with content delivery</p>
+                </div>
+                <div class="highlight-box">
+                    <h4>Scalability</h4>
+                    <p>Independent scaling of progression features</p>
+                </div>
+                <div class="highlight-box">
+                    <h4>Reusability</h4>
+                    <p>The progression service can be reused across different projects</p>
+                </div>
+                <div class="highlight-box">
+                    <h4>Industry Standard</h4>
+                    <p>Microservice architecture is the modern backend standard</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Before vs After -->
+    <div class="slide">
+        <h2>Before vs After Integration</h2>
+        <div class="two-column">
+            <div class="card">
+                <h3 style="color: #f87171;">❌ Before Integration</h3>
+                <ul>
+                    <li>Static completion tracking</li>
+                    <li>No motivation system</li>
+                    <li>Isolated user data</li>
+                    <li>No rankings</li>
+                    <li>Monolithic architecture</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="color: #4ade80;">✅ After Integration</h3>
+                <ul>
+                    <li>Dynamic XP-based progression</li>
+                    <li>Level-up system with visual progress</li>
+                    <li>Cross-service user sync via webhooks</li>
+                    <li>Real-time leaderboard</li>
+                    <li>Microservice-oriented structure</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Architecture - Before -->
+    <div class="slide">
+        <h2>Architecture: Before Integration</h2>
+        <div class="diagram">
+            <div class="diagram-box">
+                <h4>Client</h4>
+                <p>Browser/Mobile</p>
+            </div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-box" style="border-color: #f87171; min-width: 280px;">
+                <h4 style="color: #f87171;">Main Application</h4>
+                <p>Monolithic Learning System</p>
+                <p style="margin-top: 8px; font-size: 0.7rem;">Lessons · Quizzes · Users · Scores</p>
+                <p style="font-size: 0.7rem;">Single Database (all mixed)</p>
+            </div>
+        </div>
+        <div class="card" style="margin-top: 25px;">
+            <h3 style="color: #f87171;">Limitations</h3>
+            <p>✗ No gamification &nbsp;&nbsp; ✗ No separation of concerns &nbsp;&nbsp; ✗ Hard to scale &nbsp;&nbsp; ✗ No leaderboard &nbsp;&nbsp; ✗ No XP tracking</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: Architecture - After -->
+    <div class="slide">
+        <h2>Architecture: After Integration</h2>
+        <div class="diagram">
+            <div class="diagram-box">
+                <h4>Client</h4>
+                <p>Browser/Mobile</p>
+            </div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-box" style="min-width: 200px;">
+                <h4>Main App</h4>
+                <p>Original LMS</p>
+                <p style="font-size: 0.7rem;">Lessons · Quizzes · Auth</p>
+            </div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-box" style="border-color: #a78bfa; min-width: 220px;">
+                <h4 style="color: #a78bfa;">Progression Service</h4>
+                <p>NEW — Gamification</p>
+                <p style="font-size: 0.7rem;">XP · Levels · Leaderboard</p>
+                <p style="font-size: 0.7rem;">In-Memory Storage</p>
+            </div>
+        </div>
+        <div class="two-column" style="margin-top: 20px;">
+            <div class="card">
+                <h3>Main App Responsibilities</h3>
+                <ul>
+                    <li>Content delivery & rendering</li>
+                    <li>Quiz question presentation</li>
+                    <li>User interface & experience</li>
+                    <li>Calls progression service via webhooks</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Progression Service Responsibilities</h3>
+                <ul>
+                    <li>XP calculation & allocation</li>
+                    <li>Level progression management</li>
+                    <li>Leaderboard generation & ranking</li>
+                    <li>User progress persistence (in-memory)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: Data Flow -->
+    <div class="slide">
+        <h2>Data Flow: Lesson Completion</h2>
+        <div class="card">
+            <table>
+                <tr>
+                    <th>Step</th>
+                    <th>Action</th>
+                    <th>System</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>User clicks "Complete Lesson"</td>
+                    <td>Frontend</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Save completion to MySQL</td>
+                    <td>Main App</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>POST /webhook/lesson-complete</td>
+                    <td>Main App → Progression</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Verify API key, find/create user</td>
+                    <td>Progression Service</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Add +50 XP, check for level-up</td>
+                    <td>Progression Service</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Return updated stats</td>
+                    <td>Progression → Main App</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Display level-up animation</td>
+                    <td>Frontend</td>
+                </tr>
+            </table>
+        </div>
+        <div class="highlight-box" style="margin-top: 15px;">
+            <h4>Key Point</h4>
+            <p>The main app does <strong>not wait</strong> for the webhook response to show "Lesson Complete" to the user. The webhook is fire-and-forget — the XP update happens asynchronously.</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: Authentication -->
+    <div class="slide">
+        <h2>Authentication: Two Methods</h2>
+        <div class="two-column">
+            <div class="card">
+                <h3 style="color: #60a5fa;">🔐 JWT (User Routes)</h3>
+                <p><strong>Used for:</strong></p>
+                <ul>
+                    <li>GET /users/me</li>
+                    <li>POST /users/me/lessons/complete</li>
+                    <li>POST /users/me/quizzes/submit</li>
+                </ul>
+                <div class="code-block" style="margin-top: 15px;">
+<span class="key">Header:</span> <span class="string">Authorization: Bearer &lt;token&gt;</span>
+<span class="comment">// Token expires in 7 days</span>
+<span class="comment">// Generated via POST /auth/login</span>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: #94a3b8;">Purpose: Identify <strong>who</strong> is making the request (the user)</p>
+            </div>
+            <div class="card">
+                <h3 style="color: #f472b6;">🔑 API Key (Webhooks)</h3>
+                <p><strong>Used for:</strong></p>
+                <ul>
+                    <li>POST /webhook/lesson-complete</li>
+                    <li>POST /webhook/quiz-submit</li>
+                    <li>GET /users/:userId</li>
+                </ul>
+                <div class="code-block" style="margin-top: 15px;">
+<span class="key">Header:</span> <span class="string">x-api-key: main-system-integration-key</span>
+<span class="comment">// Shared secret between services</span>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: #94a3b8;">Purpose: Identify <strong>which service</strong> is calling (main app)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: API Endpoints -->
+    <div class="slide">
+        <h2>API Endpoints Overview</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Auth</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/health</td>
+                    <td><span class="badge badge-green">None</span></td>
+                    <td>Service status check</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/auth/login</td>
+                    <td><span class="badge badge-green">None</span></td>
+                    <td>Get JWT token</td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/users/me</td>
+                    <td><span class="badge badge-blue">JWT</span></td>
+                    <td>Current user profile + XP bar</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/users/me/lessons/complete</td>
+                    <td><span class="badge badge-blue">JWT</span></td>
+                    <td>Direct lesson completion</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/users/me/quizzes/submit</td>
+                    <td><span class="badge badge-blue">JWT</span></td>
+                    <td>Direct quiz submission</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/webhook/lesson-complete</td>
+                    <td><span class="badge badge-purple">API Key</span></td>
+                    <td>Main app reports lesson done</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/webhook/quiz-submit</td>
+                    <td><span class="badge badge-purple">API Key</span></td>
+                    <td>Main app reports quiz score</td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/users/:userId</td>
+                    <td><span class="badge badge-purple">API Key</span></td>
+                    <td>Lookup any user by ID</td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/leaderboard</td>
+                    <td><span class="badge badge-green">None</span></td>
+                    <td>Public ranked list</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: XP System -->
+    <div class="slide">
+        <h2>XP System & Level Curve</h2>
+        <div class="two-column">
+            <div>
+                <h3>Exponential Formula</h3>
+                <div class="code-block">
+<span class="key">const</span> getXPForLevel = (level) =>
+  Math.floor(<span class="number">100</span> * Math.pow(<span class="number">1.3</span>, level - <span class="number">1</span>));
+                </div>
+                <table style="margin-top: 15px;">
+                    <tr>
+                        <th>Level</th>
+                        <th>XP Needed</th>
+                        <th>Total (Cumulative)</th>
+                    </tr>
+                    <tr><td>1</td><td>100</td><td>0</td></tr>
+                    <tr><td>2</td><td>130</td><td>100</td></tr>
+                    <tr><td>3</td><td>169</td><td>230</td></tr>
+                    <tr><td>4</td><td>220</td><td>399</td></tr>
+                    <tr><td>5</td><td>286</td><td>619</td></tr>
+                </table>
+            </div>
+            <div>
+                <h3>XP Sources</h3>
+                <div class="card" style="margin-bottom: 12px;">
+                    <h4>📚 Lesson Complete</h4>
+                    <p style="font-size: 1.1rem; color: #4ade80; font-weight: 700;">+50 XP (fixed)</p>
+                </div>
+                <div class="card">
+                    <h4>📝 Quiz Submit</h4>
+                    <p>Base: <strong style="color: #4ade80;">+30 XP</strong></p>
+                    <p>Bonus: up to <strong style="color: #60a5fa;">+70 XP</strong></p>
+                    <p style="font-size: 0.9rem; color: #94a3b8;">Bonus = floor((score/maxScore) × 70)</p>
+                    <p style="font-size: 1.1rem; color: #fbbf24; font-weight: 700; margin-top: 8px;">Max: +100 XP for 100%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: Integration Process -->
+    <div class="slide">
+        <h2>Integration Process</h2>
+        <div class="two-column">
+            <div>
+                <h3>Technologies Used</h3>
+                <ul>
+                    <li>Node.js — Runtime environment</li>
+                    <li>Express.js — Web framework</li>
+                    <li>JWT (jsonwebtoken) — User auth tokens</li>
+                    <li>CORS — Cross-origin requests</li>
+                    <li>In-Memory Map — Data storage</li>
+                    <li>Render — Cloud deployment</li>
+                </ul>
+                <h3 style="margin-top: 20px;">Setup Steps</h3>
+                <ul>
+                    <li>Initialize project (npm init)</li>
+                    <li>Install dependencies (express, cors, jwt)</li>
+                    <li>Create server file (index.js)</li>
+                    <li>Configure middleware & routes</li>
+                    <li>Deploy to Render</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Configuration</h3>
+                <div class="code-block">
+<span class="key">const</span> PORT = process.env.PORT || <span class="number">3000</span>;
+<span class="key">const</span> JWT_SECRET = <span class="string">"sia2024-progression-secret"</span>;
+<span class="key">const</span> API_KEY = <span class="string">"main-system-integration-key"</span>;
+
+<span class="comment">// CORS — allow all origins (dev)</span>
+app.use(cors());
+
+<span class="comment">// XP Config</span>
+<span class="comment">// Lesson: 50 XP base</span>
+<span class="comment">// Quiz: 30 base + up to 70 bonus</span>
+<span class="comment">// Level: 100 × 1.3^(level-1)</span>
+                </div>
+                <div class="highlight-box" style="margin-top: 15px;">
+                    <h4>Live Deployment</h4>
+                    <p><strong>URL:</strong> https://sia101-final-project.onrender.com</p>
+                    <p><strong>Status:</strong> <span style="color: #4ade80;">● Live & Active</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: Challenges & Solutions -->
+    <div class="slide">
+        <h2>Challenges & Solutions</h2>
+        <div class="two-column">
+            <div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h3 style="color: #f87171;">❌ CORS Errors</h3>
+                    <p><strong>Problem:</strong> Browser blocked requests from main app to progression service</p>
+                    <p><strong>Solution:</strong> Added <code style="background: #0f172a; padding: 2px 6px; border-radius: 4px;">cors()</code> middleware</p>
+                </div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h3 style="color: #f87171;">❌ Two Auth Systems</h3>
+                    <p><strong>Problem:</strong> Needed JWT for users + API Key for services</p>
+                    <p><strong>Solution:</strong> Implemented separate middleware functions</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: #f87171;">❌ In-Memory Persistence</h3>
+                    <p><strong>Problem:</strong> Data resets when server restarts (Render free tier)</p>
+                    <p><strong>Solution:</strong> Documented limitation; acceptable for academic demo. Future: Redis/PostgreSQL</p>
+                </div>
+            </div>
+            <div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h3 style="color: #f87171;">❌ XP Calculation Edge Cases</h3>
+                    <p><strong>Problem:</strong> Exponential scaling caused multi-level jump issues</p>
+                    <p><strong>Solution:</strong> Implemented while-loop for accurate multi-level progression</p>
+                </div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h3 style="color: #f87171;">❌ Render Cold Starts</h3>
+                    <p><strong>Problem:</strong> Server takes time to wake up after inactivity</p>
+                    <p><strong>Solution:</strong> Added health check endpoint; ping before demo</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: #f87171;">❌ Data Format Consistency</h3>
+                    <p><strong>Problem:</strong> Different user ID formats between services</p>
+                    <p><strong>Solution:</strong> Standardized on string-based userId across both</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: Testing & Validation -->
+    <div class="slide">
+        <h2>Testing & Validation Results</h2>
+        <div class="card" style="margin-bottom: 15px;">
+            <h3>API Testing — All Endpoints Verified</h3>
+            <table>
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Result</th>
+                </tr>
+                <tr><td>/health</td><td>GET</td><td>200 OK</td><td>Service running</td></tr>
+                <tr><td>/</td><td>GET</td><td>200 OK</td><td>Basic info</td></tr>
+                <tr><td>/auth/login</td><td>POST</td><td>200 OK</td><td>Token generated</td></tr>
+                <tr><td>/users/me</td><td>GET</td><td>200 OK</td><td>Profile returned</td></tr>
+                <tr><td>/users/me/lessons/complete</td><td>POST</td><td>200 OK</td><td>XP added</td></tr>
+                <tr><td>/users/me/quizzes/submit</td><td>POST</td><td>200 OK</td><td>Quiz scored</td></tr>
+                <tr><td>/webhook/lesson-complete</td><td>POST</td><td>200 OK</td><td>Progress recorded</td></tr>
+                <tr><td>/webhook/quiz-submit</td><td>POST</td><td>200 OK</td><td>Quiz recorded</td></tr>
+                <tr><td>/users/:userId</td><td>GET</td><td>200 OK</td><td>User data returned</td></tr>
+                <tr><td>/leaderboard</td><td>GET</td><td>200 OK</td><td>Rankings displayed</td></tr>
+            </table>
+        </div>
+        <div class="card">
+            <h3>Error Handling Verification</h3>
+            <table>
+                <tr>
+                    <th>Error Case</th>
+                    <th>Expected</th>
+                    <th>Actual</th>
+                    <th>Pass</th>
+                </tr>
+                <tr><td>Missing API Key</td><td>401 Invalid API key</td><td>401 Invalid API key</td><td class="check-pass">✓</td></tr>
+                <tr><td>Missing JWT</td><td>403 No token provided</td><td>403 No token provided</td><td class="check-pass">✓</td></tr>
+                <tr><td>Invalid JWT</td><td>401 Invalid token</td><td>401 Invalid token</td><td class="check-pass">✓</td></tr>
+                <tr><td>Missing required fields</td><td>400 error</td><td>400 error</td><td class="check-pass">✓</td></tr>
+                <tr><td>User not found</td><td>404 User not found</td><td>404 User not found</td><td class="check-pass">✓</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: Live Testing -->
+    <div class="slide">
+        <h2>Live Testing — Postman Demonstrations</h2>
+        <div class="two-column">
+            <div>
+                <h3>Test 1: Service Health</h3>
+                <div class="code-block">
+<span class="key">GET</span> https://sia101-final-project.onrender.com/health
+
+{
+  <span class="string">"status"</span>: <span class="string">"ok"</span>,
+  <span class="string">"service"</span>: <span class="string">"progression-service"</span>
+}
+                </div>
+                <h3 style="margin-top: 20px;">Test 2: Webhook Lesson</h3>
+                <div class="code-block">
+<span class="key">POST</span> /webhook/lesson-complete
+<span class="key">Header:</span> x-api-key: main-system-integration-key
+
+Body: { <span class="string">"userId"</span>: <span class="string">"123"</span>, <span class="string">"username"</span>: <span class="string">"John"</span>, <span class="string">"lessonId"</span>: <span class="string">"L1"</span> }
+
+Response: { <span class="string">"success"</span>: <span class="string">"true"</span>, <span class="string">"xpGained"</span>: <span class="number">50</span>, <span class="string">"level"</span>: <span class="number">1</span> }
+                </div>
+            </div>
+            <div>
+                <h3>Test 3: Verify User Progress</h3>
+                <div class="code-block">
+<span class="key">GET</span> /users/123
+<span class="key">Header:</span> x-api-key: main-system-integration-key
+
+{
+  <span class="string">"userId"</span>: <span class="string">"123"</span>,
+  <span class="string">"level"</span>: <span class="number">1</span>,
+  <span class="string">"xp"</span>: <span class="number">50</span>,
+  <span class="string">"totalLessons"</span>: <span class="number">1</span>
+}
+                </div>
+                <h3 style="margin-top: 20px;">Test 4: Leaderboard</h3>
+                <div class="code-block">
+<span class="key">GET</span> /leaderboard
+
+{
+  <span class="string">"leaderboard"</span>: [
+    {
+      <span class="string">"position"</span>: <span class="number">1</span>,
+      <span class="string">"username"</span>: <span class="string">"John"</span>,
+      <span class="string">"level"</span>: <span class="number">1</span>,
+      <span class="string">"xp"</span>: <span class="number">50</span>
+    }
+  ]
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: Postman Collection -->
+    <div class="slide">
+        <h2>Postman Collection Structure</h2>
+        <div class="two-column">
+            <div>
+                <div class="endpoint-card">
+                    <span class="method">📁</span><span class="path">Public</span>
+                    <p>GET /health · GET / · GET /leaderboard</p>
+                </div>
+                <div class="endpoint-card" style="border-left-color: #60a5fa;">
+                    <span class="method" style="color: #60a5fa;">📁</span><span class="path">Authentication</span>
+                    <p>POST /auth/login</p>
+                </div>
+                <div class="endpoint-card" style="border-left-color: #60a5fa;">
+                    <span class="method" style="color: #60a5fa;">📁</span><span class="path">User Routes (JWT)</span>
+                    <p>GET /users/me · POST /lessons/complete · POST /quizzes/submit</p>
+                </div>
+                <div class="endpoint-card" style="border-left-color: #f472b6;">
+                    <span class="method" style="color: #f472b6;">📁</span><span class="path">Webhooks (API Key)</span>
+                    <p>POST /lesson-complete · POST /quiz-submit</p>
+                </div>
+                <div class="endpoint-card" style="border-left-color: #f472b6;">
+                    <span class="method" style="color: #f472b6;">📁</span><span class="path">Admin (API Key)</span>
+                    <p>GET /users/:userId</p>
+                </div>
+            </div>
+            <div>
+                <h3>Environment Variables</h3>
+                <div class="code-block">
+base_url: https://sia101-final-project.onrender.com
+api_key: main-system-integration-key
+jwt_token: <span class="comment">// (auto-set from login)</span>
+                </div>
+                <div class="highlight-box" style="margin-top: 15px;">
+                    <h4>Auto-Token Script</h4>
+                    <p>Add to Tests tab in /auth/login:</p>
+                    <div class="code-block" style="margin-top: 8px;">
+var jsonData = pm.response.json();
+pm.environment.set(<span class="string">"jwt_token"</span>, jsonData.token);
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: Future Improvements -->
+    <div class="slide">
+        <h2>Future Improvements</h2>
+        <div class="two-column">
+            <div>
+                <h3>Short Term</h3>
+                <ul>
+                    <li>Redis persistence layer</li>
+                    <li>Rate limiting on webhooks</li>
+                    <li>Webhook retry logic</li>
+                    <li>Audit log for XP transactions</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Long Term</h3>
+                <ul>
+                    <li>Achievement/badge system</li>
+                    <li>Daily streaks & bonuses</li>
+                    <li>Friend leaderboards (private)</li>
+                    <li>Admin dashboard for analytics</li>
+                </ul>
+            </div>
+        </div>
+        <div class="highlight-box" style="margin-top: 20px;">
+            <h4>Production Readiness Checklist</h4>
+            <p>☐ Replace in-memory Map with Redis or PostgreSQL &nbsp;&nbsp; ☐ Add input validation (Joi/Zod) &nbsp;&nbsp; ☐ Circuit breaker for webhook failures &nbsp;&nbsp; ☐ Metrics & monitoring (Prometheus/Grafana) &nbsp;&nbsp; ☐ Docker + CI/CD pipeline</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 18: Thank You -->
+    <div class="slide title-slide">
+        <h1>Thank You</h1>
+        <p class="subtitle">Questions & Discussion</p>
+        <div class="badges">
+            <span class="badge badge-blue">Node.js</span>
+            <span class="badge badge-green">Express</span>
+            <span class="badge badge-purple">JWT</span>
+            <span class="badge badge-orange">REST API</span>
+        </div>
+        <p style="margin-top: 30px; color: #64748b;">SIA 101 — Final Project</p>
+        <p style="color: #64748b; font-size: 1rem;">Allyza Gwenn Suana · Mica-Ella Bacalso · Rixianne Jade Generalao</p>
+        <p style="margin-top: 15px; color: #475569; font-size: 0.9rem;">GitHub: github.com/allyzagwennsuana202301889-bit/SIA101-Final-Project</p>
+        <p style="color: #475569; font-size: 0.9rem;">Live: sia101-final-project.onrender.com</p>
+    </div>
+
+    <div class="nav-hint">← → Arrow keys to navigate</div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let current = 0;
+
+        function showSlide(index) {
+            slides.forEach(s => s.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                if (current < slides.length - 1) {
+                    current++;
+                    showSlide(current);
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (current > 0) {
+                    current--;
+                    showSlide(current);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
