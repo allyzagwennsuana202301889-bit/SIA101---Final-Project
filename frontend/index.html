@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIA101 Progression Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+            <div class="glass rounded-2xl p-8 max-w-md w-full slide-up">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 mb-4">
+                        <i class="fas fa-rocket text-2xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">SIA101</h1>
+                    <p class="text-gray-400 mt-2">Progression Service</p>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">User ID</label>
+                        <input type="text" id="user-id" required class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:outline-none transition-colors" placeholder="Enter your user ID">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Username</label>
+                        <input type="text" id="username" required class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:outline-none transition-colors" placeholder="Enter your username">
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <i class="fas fa-info-circle"></i>
+                        <span>API: <span id="api-url-display" class="text-purple-400">https://sia101-final-project.onrender.com</span></span>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 font-semibold transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Enter Dashboard
+                    </button>
+                </form>
+                <div class="mt-6 pt-6 border-t border-gray-800">
+                    <div class="flex items-center justify-between text-sm">
+                        <button onclick="testConnection()" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-heartbeat mr-1"></i>Test Connection
+                        </button>
+                        <span id="connection-status" class="text-gray-600">Not tested</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="hidden min-h-screen">
+            <!-- Header -->
+            <header class="glass sticky top-0 z-50 border-b border-gray-800">
+                <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center font-bold text-lg" id="user-avatar">?</div>
+                        <div>
+                            <h2 class="font-bold text-lg" id="header-username">User</h2>
+                            <p class="text-xs text-gray-400">Level <span id="header-level">1</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="refreshData()" class="p-2 rounded-lg hover:bg-gray-800 transition-colors" title="Refresh">
+                            <i class="fas fa-sync-alt" id="refresh-icon"></i>
+                        </button>
+                        <button onclick="logout()" class="px-4 py-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors text-sm font-medium">
+                            <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="max-w-6xl mx-auto px-4 py-8 space-y-6">
+                <!-- Level & XP Card -->
+                <div class="glass rounded-2xl p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <div class="flex items-center gap-3">
+                                    <div class="relative">
+                                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-3xl font-bold" id="level-badge">
+                                            <span id="level-num">1</span>
+                                        </div>
+                                        <div id="level-up-effect" class="absolute inset-0 rounded-full border-4 border-yellow-400 hidden"></div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-2xl font-bold">Level <span id="display-level">1</span></h3>
+                                        <p class="text-gray-400" id="level-title">Beginner</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-purple-400"><span id="current-xp">0</span> <span class="text-sm text-gray-500 font-normal">/ <span id="needed-xp">100</span> XP</span></div>
+                                <div class="text-sm text-gray-400 mt-1"><span id="progress-percent">0</span>% to next level</div>
+                            </div>
+                        </div>
+                        <div class="w-full h-4 bg-gray-800 rounded-full overflow-hidden">
+                            <div id="xp-bar" class="xp-bar-fill h-full bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass rounded-xl p-5 stat-card cursor-pointer" onclick="simulateLesson()">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                <i class="fas fa-book-open text-green-400"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">+50 XP each</span>
+                        </div>
+                        <div class="text-2xl font-bold" id="total-lessons">0</div>
+                        <div class="text-sm text-gray-400">Lessons Completed</div>
+                        <button class="mt-3 w-full py-2 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 text-sm font-medium transition-colors">
+                            <i class="fas fa-plus mr-1"></i>Complete Lesson
+                        </button>
+                    </div>
+
+                    <div class="glass rounded-xl p-5 stat-card cursor-pointer" onclick="openQuizModal()">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                                <i class="fas fa-question-circle text-yellow-400"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">+30-100 XP</span>
+                        </div>
+                        <div class="text-2xl font-bold" id="total-quizzes">0</div>
+                        <div class="text-sm text-gray-400">Quizzes Taken</div>
+                        <div class="mt-3 flex items-center gap-2">
+                            <div class="text-sm text-gray-500">Avg Score:</div>
+                            <div class="text-lg font-bold text-yellow-400" id="avg-score">0%</div>
+                        </div>
+                        <button class="mt-2 w-full py-2 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 text-sm font-medium transition-colors">
+                            <i class="fas fa-plus mr-1"></i>Submit Quiz
+                        </button>
+                    </div>
+
+                    <div class="glass rounded-xl p-5 stat-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <i class="fas fa-trophy text-blue-400"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">Live</span>
+                        </div>
+                        <div class="text-sm text-gray-400 mb-2">Leaderboard Position</div>
+                        <div class="text-3xl font-bold text-blue-400" id="leaderboard-pos">-</div>
+                        <button onclick="loadLeaderboard()" class="mt-3 w-full py-2 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 text-sm font-medium transition-colors">
+                            <i class="fas fa-list mr-1"></i>View Leaderboard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                        <i class="fas fa-history text-purple-400"></i> Activity Log
+                    </h3>
+                    <div id="activity-log" class="space-y-2 max-h-64 overflow-y-auto">
+                        <div class="text-center text-gray-500 py-4">No activity yet. Start learning!</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Quiz Modal -->
+        <div id="quiz-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="glass rounded-2xl p-6 max-w-md w-full slide-up">
+                <h3 class="text-xl font-bold mb-4">Submit Quiz Results</h3>
+                <form id="quiz-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Your Score</label>
+                        <input type="number" id="quiz-score" required min="0" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:outline-none" placeholder="e.g. 85">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Max Score</label>
+                        <input type="number" id="quiz-max" required min="1" value="100" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div class="text-sm text-gray-500 bg-gray-800/50 p-3 rounded-lg">
+                        <i class="fas fa-lightbulb mr-1 text-yellow-400"></i>
+                        XP = 30 base + up to 70 bonus based on percentage
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeQuizModal()" class="flex-1 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 font-semibold transition-all">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Leaderboard Modal -->
+        <div id="leaderboard-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="glass rounded-2xl p-6 max-w-lg w-full slide-up max-h-[80vh] flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-crown text-yellow-400"></i> Leaderboard
+                    </h3>
+                    <button onclick="closeLeaderboard()" class="p-2 hover:bg-gray-800 rounded-lg transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="leaderboard-list" class="overflow-y-auto space-y-2 flex-1">
+                    <div class="text-center text-gray-500 py-8">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-6 right-6 z-[200] transform translate-y-20 opacity-0 transition-all duration-300">
+            <div class="glass rounded-xl px-6 py-4 flex items-center gap-3 shadow-2xl">
+                <div id="toast-icon" class="w-8 h-8 rounded-full flex items-center justify-center"></div>
+                <div>
+                    <div id="toast-title" class="font-bold"></div>
+                    <div id="toast-message" class="text-sm text-gray-400"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
